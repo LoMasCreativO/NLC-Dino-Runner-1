@@ -27,7 +27,6 @@ class Dinosaur(Sprite):
             self.duck()
         if self.dino_run:
             self.run()
-        print('tecla presionada {}'.format(user_input))
 
         if user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_run = False
