@@ -1,7 +1,10 @@
 import pygame
 
 from dino_runner.components.dinosaur import Dinosaur
+from dino_runner.components.lives_manager import LivesManager
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.power_ups.hammer_on_ground import HammerOnGround
+from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 from dino_runner.components.text_utils import get_score_element, get_centered_message
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 
@@ -22,9 +25,14 @@ class Game:
         self.points = 0
         self.running = True
         self.death_count = 0
+        self.powerup_manager = PowerUpManager()
+        self.lives_manager = LivesManager()
+        self.hammer = HammerOnGround(self.screen)
+        self.hammer_is_throw = False
 
     def run(self): #metodo
-        self.obstacle_manager.reset_obstacles()
+        self.lives_manager.refill_lives()
+        self.create_components()
         # Game loop: events - update - draw
         self.playing = True
         while self.playing:
@@ -32,11 +40,14 @@ class Game:
             self.update()
             self.draw()
 
+    def create_components(self):
+        self.obstacle_manager.reset_obstacles()
+        self.powerup_manager.reset_power_ups(self.points)
+
     def execute(self):
         while self.running:
             if not self.playing:
                 self.show_menu()
-
 
     def events(self):
         for event in pygame.event.get():
@@ -47,14 +58,24 @@ class Game:
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
+        self.powerup_manager.update(self.points, self.game_speed, self.player)
+        self.hammer.throw_hammer(self, user_input, self.player.type)
+
 
     def draw(self):
-        self.score()
+
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.lives_manager.draw(self.screen)
+        self.score()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.powerup_manager.draw(self.screen)
+        if self.hammer_is_throw:
+            self.hammer.draw(self)
+
+
         pygame.display.update()
         pygame.display.flip()
 
@@ -65,6 +86,7 @@ class Game:
 
         score, score_rect = get_score_element(self.points)
         self.screen.blit(score, score_rect)
+        self.player.check_invincibility(self.screen)
 
 
     def show_menu(self):
@@ -85,10 +107,10 @@ class Game:
         half_screen_height = SCREEN_HEIGHT // 2
         half_screen_width = SCREEN_WIDTH // 2
 
-        print('muertes {}'.format(self.death_count))
+
         text, text_rect = get_centered_message('Press any key to start the game')
         self.screen.blit(text, text_rect)
-        text, text_rect = get_centered_message('muertes: {}'.format(self.death_count), half_screen_width , half_screen_height + 100)
+        text, text_rect = get_centered_message('muertes: {}'.format(self.death_count), half_screen_width, half_screen_height + 100)
         self.screen.blit(text, text_rect)
 
 
