@@ -1,4 +1,4 @@
-from dino_runner.components.lives import Lives
+from dino_runner.components.life.lives import Lives
 
 
 class LivesManager():

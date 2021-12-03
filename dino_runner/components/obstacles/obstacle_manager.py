@@ -15,6 +15,9 @@ class ObstacleManager:
 
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
+            if game.powerup_manager.hammer.rect.colliderect(obstacle.rect):
+                if obstacle in self.obstacles:
+                    self.obstacles.remove(obstacle)
 
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.shield:
@@ -24,7 +27,7 @@ class ObstacleManager:
                     if game.lives_manager.lives_counter() == 0:
                         pygame.time.delay(500)
                         game.playing = False
-                    game.death_count += 1
+                        game.death_count += 1
                     break
                 else:
                     self.obstacles.remove(obstacle)

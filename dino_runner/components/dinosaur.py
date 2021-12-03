@@ -29,6 +29,7 @@ class Dinosaur(Sprite):
         self.dino_jump = False
         self.jump_vel = self.JUMP_VEL
         self.setup_state_booleans()
+        self.pos_player = int
 
     def setup_state_booleans(self):
         self.has_powerup = False
@@ -82,11 +83,12 @@ class Dinosaur(Sprite):
         self.step_index += 1
 
     def jump(self):
-        self.image = self.jump_img[self.type] #wwewer
+        self.image = self.jump_img[self.type]
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 1
             print("Y: {}, jump_vel: {}".format(self.dino_rect.y, self.jump_vel))
+            self.pos_player = self.dino_rect.y
 
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
