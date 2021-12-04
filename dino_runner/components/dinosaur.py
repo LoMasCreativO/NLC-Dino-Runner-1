@@ -1,9 +1,9 @@
 import pygame
 from pygame.sprite import Sprite
 
-from dino_runner.components.text_utils import get_centered_message
+from dino_runner.components.text_utils import get_message
 from dino_runner.utils.constants import RUNNING, DUCKING, JUMPING, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, \
-    JUMPING_SHIELD, RUNNING_SHIELD, HAMMER_TYPE, DUCKING_HAMMER, RUNNING_HAMMER, JUMPING_HAMMER, HAMMER
+    JUMPING_SHIELD, RUNNING_SHIELD, HAMMER_TYPE, DUCKING_HAMMER, RUNNING_HAMMER, JUMPING_HAMMER
 
 
 class Dinosaur(Sprite):
@@ -87,7 +87,6 @@ class Dinosaur(Sprite):
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 1
-            print("Y: {}, jump_vel: {}".format(self.dino_rect.y, self.jump_vel))
             self.pos_player = self.dino_rect.y
 
         if self.jump_vel < -self.JUMP_VEL:
@@ -100,7 +99,7 @@ class Dinosaur(Sprite):
             time_to_show = round((self.shield_time_up - pygame.time.get_ticks()) / 190, 2)
             if time_to_show >= 0:
                 if self.show_text:
-                    text, text_rect = get_centered_message(f'shield enable for {time_to_show}', 500, 40)
+                    text, text_rect = get_message(f'shield enable for {time_to_show}', 500, 40)
                     screen.blit(text, text_rect)
             else:
                 self.shield = False

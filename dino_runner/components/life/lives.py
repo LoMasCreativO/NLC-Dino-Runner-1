@@ -8,9 +8,8 @@ class Lives(Sprite):
         self.image = HEART
         self.x_pos = pos_x
         self.rect = self.image.get_rect()
-        self.rect.y = 150
+        self.rect.y = 30
         self.rect.x = self.x_pos
-        #self.rect.x = self.pos_x
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))

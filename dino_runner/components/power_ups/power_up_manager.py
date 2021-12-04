@@ -20,8 +20,7 @@ class PowerUpManager:
         self.hammer.hammers_left = 0
         self.power_ups = []
         self.points = points
-        self.when_appears = 50 + self.points
-        # self.when_appears = random.randint(200, 300) + self.points
+        self.when_appears = random.randint(200, 300) + self.points
         player.hammer = False
         player.type = DEFAULT_TYPE
 
@@ -29,11 +28,9 @@ class PowerUpManager:
         self.points = points
         if len(self.power_ups) == 0:
             if self.when_appears == self.points:
-                print("generating powerup")
                 self.when_appears = random.randint(self.when_appears + 200, 500 + self.when_appears)
                 if player.type == DEFAULT_TYPE:
-                    self.power_ups.append(Hammer())
-                    # self.power_ups.append(random.choice([Shield(), Hammer()]))
+                    self.power_ups.append(random.choice([Shield(), Hammer()]))
 
     def update(self, points, game_speed, player):
         self.generate_power_ups(points, player)
